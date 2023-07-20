@@ -45,6 +45,12 @@ export declare class FormGroup<TControls extends ControlsCollection = ControlsCo
     protected getControls(): IterableIterator<AbstractControl>;
     private checkGroupValidations;
     runInAction(action: () => void): void;
+    /**
+     * Initial state handler function
+     * / Функция отбработчик установки начального состояния
+     */
+    protected handleReset(): this;
+    reset: () => this;
     get formData(): TControlsValues;
     updateFormData(data: Partial<TControlsValues>): void;
 }

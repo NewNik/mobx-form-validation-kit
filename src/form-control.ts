@@ -125,9 +125,9 @@ export class FormControl<TEntity = string> extends AbstractControl {
 
   private comparer: Comparer<TEntity>;
 
-  /** 
+  /**
    * Get Initializing value
-   * / Получить инициализирующее значение 
+   * / Получить инициализирующее значение
    */
   public get initialValue() {
     return this.initialValueGettter();
@@ -138,7 +138,7 @@ export class FormControl<TEntity = string> extends AbstractControl {
    * / Измененное значение не равно инициализирующему значению
    */
   public get changed() {
-    return this.comparer(this.initialValue, this.internalValue)
+    return this.comparer(this.initialValue, this.internalValue);
   }
 
   constructor(
@@ -187,7 +187,7 @@ export class FormControl<TEntity = string> extends AbstractControl {
 
     this.reactionOnIsActiveDisposer = reaction(
       () => this.active,
-      (active) => {
+      active => {
         this.serverErrors = [];
         if (active) {
           this.checkInternalValue(this.isInitialized || this.callSetterOnInitialize);
@@ -239,14 +239,11 @@ export class FormControl<TEntity = string> extends AbstractControl {
       this.onChange.call(this);
       this.checkInternalValue(this.isInitialized ? this.callSetterOnReinitialize : this.callSetterOnInitialize);
       this.isInitializedValue = true;
-    }
+    };
 
     reactionOnValueGetter(this.initialValueGettter());
 
-    this.reactionOnValueGetterDisposer = reaction(
-      this.initialValueGettter,
-      reactionOnValueGetter,
-    );
+    this.reactionOnValueGetterDisposer = reaction(this.initialValueGettter, reactionOnValueGetter);
 
     return this;
   };
@@ -255,16 +252,16 @@ export class FormControl<TEntity = string> extends AbstractControl {
     this.baseExecuteAsyncValidation(validator, () => this.checkInternalValue(true));
 
   /**
-  * Set marker "Value has changed" 
-  * / Установить маркер "Значение изменилось"
-  */
+   * Set marker "Value has changed"
+   * / Установить маркер "Значение изменилось"
+   */
   public setDirty = (dirty: boolean) => {
     this.isDirty = dirty;
     return this;
   };
 
   /**
-   * Set marker "field was in focus" 
+   * Set marker "field was in focus"
    * / Установить маркер "Поле было в фокусе"
    */
   public setTouched = (touched: boolean) => {
@@ -277,6 +274,28 @@ export class FormControl<TEntity = string> extends AbstractControl {
     return this;
   };
 
+  /**
+   * Initial state handler function
+   * / Функция отбработчик установки начального состояния
+   */
+  protected handleReset() {
+    this.value = this.initialValue;
+    this.runInAction(() => {
+      this.setDirty(false);
+      this.setFocused(false);
+      this.setTouched(false);
+    });
+  }
+
+  /**
+   * Set initial state
+   * / Установить начальное состояние
+   */
+  public reset = () => {
+    this.handleReset();
+    return this;
+  };
+
   public dispose(): void {
     super.dispose();
     this.reactionOnValueGetterDisposer && this.reactionOnValueGetterDisposer();
@@ -284,7 +303,7 @@ export class FormControl<TEntity = string> extends AbstractControl {
     this.reactionOnIsActiveDisposer();
     this.reactionOnIsDirtyDisposer();
     this.reactionOnIsFocusedDisposer();
-  };
+  }
 
   public runInAction(action: () => void): void {
     this.reactionOnValidatorDisposers.push(
@@ -293,16 +312,20 @@ export class FormControl<TEntity = string> extends AbstractControl {
         () => this.checkInternalValue(true),
       ),
     );
-  };
+  }
 
   private checkInternalValue = (shouldCallSetter: boolean) => {
     this.inProcessing = true;
     this.serverErrors = [];
-    this.onValidation(this.validators, () => this.checkInternalValue(true), () => {
-      if (shouldCallSetter && this.setValidValue && this.errors.length === 0) {
-        this.setValidValue(this.internalValue);
-      }
-      this.inProcessing = false;
-    });
+    this.onValidation(
+      this.validators,
+      () => this.checkInternalValue(true),
+      () => {
+        if (shouldCallSetter && this.setValidValue && this.errors.length === 0) {
+          this.setValidValue(this.internalValue);
+        }
+        this.inProcessing = false;
+      },
+    );
   };
 }

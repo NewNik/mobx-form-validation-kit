@@ -132,6 +132,11 @@ export declare abstract class AbstractControl {
      */
     abstract setTouched(touched: boolean): this;
     /**
+     * Set initial state
+     * / Установить начальное состояние
+     */
+    abstract reset(): this;
+    /**
      * Field for transferring additional information
      * / Поле для передачи дополнительной информации (в логике не участвует)
      */

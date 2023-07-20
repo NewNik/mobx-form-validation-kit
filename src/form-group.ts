@@ -120,6 +120,21 @@ export class FormGroup<
     );
   }
 
+  /**
+   * Initial state handler function
+   * / Функция отбработчик установки начального состояния
+   */
+  protected handleReset() {
+    for (const control of this.getControls()) {
+      control.reset();
+    }
+    return this;
+  }
+
+  public reset = () => {
+    return this.handleReset();
+  };
+
   public get formData(): TControlsValues {
     const result: Record<string, any> = {};
     for (const key in this.controls) {

@@ -1,7 +1,7 @@
 import { ValidationEvent } from './validation-event';
 import { AbstractControl, UpdateValidValueHandler, ValidatorsFunction } from './abstract-control';
 declare type Comparer<TEntity> = (prev: TEntity, current: TEntity) => boolean;
-interface OptionsFormControl<TEntity> {
+export interface OptionsFormControl<TEntity> {
     /**
      * Validations
      * / Валидациии
@@ -113,9 +113,9 @@ export declare class FormControl<TEntity = string> extends AbstractControl {
     setInitialValue: (valueOrGetter: TEntity | (() => TEntity)) => this;
     executeAsyncValidation: (validator: (control: this) => Promise<ValidationEvent[]>) => Promise<ValidationEvent[]>;
     /**
-    * Set marker "Value has changed"
-    * / Установить маркер "Значение изменилось"
-    */
+     * Set marker "Value has changed"
+     * / Установить маркер "Значение изменилось"
+     */
     setDirty: (dirty: boolean) => this;
     /**
      * Set marker "field was in focus"
@@ -123,6 +123,16 @@ export declare class FormControl<TEntity = string> extends AbstractControl {
      */
     setTouched: (touched: boolean) => this;
     setFocused: (focused: boolean) => this;
+    /**
+     * Initial state handler function
+     * / Функция отбработчик установки начального состояния
+     */
+    protected handleReset(): void;
+    /**
+     * Set initial state
+     * / Установить начальное состояние
+     */
+    reset: () => this;
     dispose(): void;
     runInAction(action: () => void): void;
     private checkInternalValue;

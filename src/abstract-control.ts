@@ -186,6 +186,12 @@ export abstract class AbstractControl {
    * / Изменяет состояния маркета "значение было в фокусе"
    */
   abstract setTouched(touched: boolean): this;
+  
+  /**
+   * Set initial state
+   * / Установить начальное состояние
+   */
+  abstract reset(): this;
 
   /**
    * Field for transferring additional information

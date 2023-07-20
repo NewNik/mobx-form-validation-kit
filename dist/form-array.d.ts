@@ -34,6 +34,12 @@ export declare class FormArray<TAbstractControl extends AbstractControl> extends
      * / Опции
      */
     options?: IOptionsFormArray<TAbstractControl>);
+    /**
+     * Initial state handler function
+     * / Функция отбработчик установки начального состояния
+     */
+    protected handleReset(): this;
+    reset: () => this;
     get(index: number): TAbstractControl;
     dispose: () => void;
     executeAsyncValidation: (validator: (control: this) => Promise<ValidationEvent[]>) => Promise<ValidationEvent[]>;

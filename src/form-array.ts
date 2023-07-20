@@ -83,6 +83,21 @@ export class FormArray<TAbstractControl extends AbstractControl> extends FormAbs
     this.checkArrayValidations();
   }
 
+  /**
+   * Initial state handler function
+   * / Функция отбработчик установки начального состояния
+   */
+  protected handleReset() {
+    for (const control of this.getControls()) {
+      control.reset();
+    }
+    return this;
+  }
+
+  public reset = () => {
+    return this.handleReset();
+  };
+
   public get(index: number): TAbstractControl {
     return this.controls[index];
   }
