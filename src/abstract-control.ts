@@ -7,7 +7,7 @@ import { IDictionary } from './idictionary';
 import { Delegate } from './delegate';
 
 export type UpdateValidValueHandler<TEntity> = (val: TEntity) => void;
-export type ValidatorsFunction<TAbstractControl extends AbstractControl> = (control: TAbstractControl) => Promise<ValidationEvent[]>
+export type ValidatorsFunction<TAbstractControl extends AbstractControl> = (control: TAbstractControl) => Promise<ValidationEvent[]>;
 export type ControlsCollection = IDictionary<AbstractControl>;
 
 export abstract class AbstractControl {
@@ -186,16 +186,31 @@ export abstract class AbstractControl {
    * / Изменяет состояния маркета "значение было в фокусе"
    */
   abstract setTouched(touched: boolean): this;
-  
+
+  /**
+   * Changed value is not equal to initializing value
+   * / Измененное значение не равно инициализирующему значению
+   */
+  abstract get changed(): boolean;
+
   /**
    * Set initial state
    * / Установить начальное состояние
    */
-  abstract reset(): this;
+  public reset = () => {
+    this.handleReset();
+    return this;
+  };
+
+  /**
+   * Initial state handler function
+   * / Функция отбработчик установки начального состояния
+   */
+  protected abstract handleReset(): this;
 
   /**
    * Field for transferring additional information
-   * / Поле для передачи дополнительной информации (в логике не участвует) 
+   * / Поле для передачи дополнительной информации (в логике не участвует)
    */
   public additionalData: any;
 
@@ -214,7 +229,7 @@ export abstract class AbstractControl {
      */
     activate: (() => boolean) | null = null,
     additionalData: any,
-    type: ControlTypes
+    type: ControlTypes,
   ) {
     makeObservable<AbstractControl, 'inProcessing' | '_serverErrors' | 'onValidation'>(this, {
       inProcessing: observable,
@@ -236,7 +251,7 @@ export abstract class AbstractControl {
 
       additionalData: observable,
 
-      onValidation: action
+      onValidation: action,
     });
 
     this.inProcessing = false;

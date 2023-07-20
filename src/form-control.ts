@@ -138,7 +138,7 @@ export class FormControl<TEntity = string> extends AbstractControl {
    * / Измененное значение не равно инициализирующему значению
    */
   public get changed() {
-    return this.comparer(this.initialValue, this.internalValue);
+    return !this.comparer(this.initialValue, this.internalValue);
   }
 
   constructor(
@@ -274,10 +274,6 @@ export class FormControl<TEntity = string> extends AbstractControl {
     return this;
   };
 
-  /**
-   * Initial state handler function
-   * / Функция отбработчик установки начального состояния
-   */
   protected handleReset() {
     this.value = this.initialValue;
     this.runInAction(() => {
@@ -285,16 +281,8 @@ export class FormControl<TEntity = string> extends AbstractControl {
       this.setFocused(false);
       this.setTouched(false);
     });
-  }
-
-  /**
-   * Set initial state
-   * / Установить начальное состояние
-   */
-  public reset = () => {
-    this.handleReset();
     return this;
-  };
+  }
 
   public dispose(): void {
     super.dispose();

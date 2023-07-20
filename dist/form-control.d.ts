@@ -123,16 +123,7 @@ export declare class FormControl<TEntity = string> extends AbstractControl {
      */
     setTouched: (touched: boolean) => this;
     setFocused: (focused: boolean) => this;
-    /**
-     * Initial state handler function
-     * / Функция отбработчик установки начального состояния
-     */
-    protected handleReset(): void;
-    /**
-     * Set initial state
-     * / Установить начальное состояние
-     */
-    reset: () => this;
+    protected handleReset(): this;
     dispose(): void;
     runInAction(action: () => void): void;
     private checkInternalValue;

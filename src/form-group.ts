@@ -5,7 +5,7 @@ import { FormAbstractGroup } from './form-abstract-group';
 import { ControlTypes } from './сontrol-types';
 import { FormControl } from './form-control';
 
-type Comparer<TEntity> = (prev: TEntity, current: TEntity) => boolean;
+type Comparer = (prev: any, current: any) => boolean;
 export interface IOptionsFormGroup<TControls extends ControlsCollection> {
   /**
    * Validations
@@ -23,7 +23,7 @@ export interface IOptionsFormGroup<TControls extends ControlsCollection> {
    */
   activate?: (() => boolean) | null;
 
-  comparer?: Comparer<any>;
+  comparer?: Comparer;
 }
 
 type ControlsValueType<TControls extends ControlsCollection = ControlsCollection> = {
@@ -42,7 +42,7 @@ export class FormGroup<
 
   private readonly validators: ValidatorsFunction<FormGroup<TControls>>[] = [];
 
-  private comparer: Comparer<any>;
+  private comparer: Comparer;
 
   public controls: TControls;
 
@@ -120,20 +120,21 @@ export class FormGroup<
     );
   }
 
-  /**
-   * Initial state handler function
-   * / Функция отбработчик установки начального состояния
-   */
+  public get changed() {
+    for (const control of this.getControls()) {
+      if(control.changed) {
+        return true;
+      }
+    }
+    return false
+  }
+
   protected handleReset() {
     for (const control of this.getControls()) {
       control.reset();
     }
     return this;
   }
-
-  public reset = () => {
-    return this.handleReset();
-  };
 
   public get formData(): TControlsValues {
     const result: Record<string, any> = {};

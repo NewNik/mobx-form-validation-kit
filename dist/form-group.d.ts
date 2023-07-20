@@ -2,7 +2,7 @@ import { AbstractControl, ControlsCollection, ValidatorsFunction } from './abstr
 import { ValidationEvent } from './validation-event';
 import { FormAbstractGroup } from './form-abstract-group';
 import { FormControl } from './form-control';
-declare type Comparer<TEntity> = (prev: TEntity, current: TEntity) => boolean;
+declare type Comparer = (prev: any, current: any) => boolean;
 export interface IOptionsFormGroup<TControls extends ControlsCollection> {
     /**
      * Validations
@@ -19,7 +19,7 @@ export interface IOptionsFormGroup<TControls extends ControlsCollection> {
      * / Функция включение валидаций по условию (по умолчанию включено всегда)
      */
     activate?: (() => boolean) | null;
-    comparer?: Comparer<any>;
+    comparer?: Comparer;
 }
 declare type ControlsValueType<TControls extends ControlsCollection = ControlsCollection> = {
     [K in keyof TControls]: TControls[K] extends FormControl<any> ? TControls[K]['value'] : TControls[K] extends FormGroup ? ControlsValueType<TControls[K]['controls']> : never;
@@ -45,12 +45,8 @@ export declare class FormGroup<TControls extends ControlsCollection = ControlsCo
     protected getControls(): IterableIterator<AbstractControl>;
     private checkGroupValidations;
     runInAction(action: () => void): void;
-    /**
-     * Initial state handler function
-     * / Функция отбработчик установки начального состояния
-     */
+    get changed(): boolean;
     protected handleReset(): this;
-    reset: () => this;
     get formData(): TControlsValues;
     updateFormData(data: Partial<TControlsValues>): void;
 }

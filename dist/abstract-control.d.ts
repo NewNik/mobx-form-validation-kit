@@ -132,10 +132,20 @@ export declare abstract class AbstractControl {
      */
     abstract setTouched(touched: boolean): this;
     /**
+     * Changed value is not equal to initializing value
+     * / Измененное значение не равно инициализирующему значению
+     */
+    abstract get changed(): boolean;
+    /**
      * Set initial state
      * / Установить начальное состояние
      */
-    abstract reset(): this;
+    reset: () => this;
+    /**
+     * Initial state handler function
+     * / Функция отбработчик установки начального состояния
+     */
+    protected abstract handleReset(): this;
     /**
      * Field for transferring additional information
      * / Поле для передачи дополнительной информации (в логике не участвует)
