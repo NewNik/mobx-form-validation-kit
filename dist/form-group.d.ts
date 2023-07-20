@@ -2,7 +2,6 @@ import { AbstractControl, ControlsCollection, ValidatorsFunction } from './abstr
 import { ValidationEvent } from './validation-event';
 import { FormAbstractGroup } from './form-abstract-group';
 import { FormControl } from './form-control';
-declare type Comparer = (prev: any, current: any) => boolean;
 export interface IOptionsFormGroup<TControls extends ControlsCollection> {
     /**
      * Validations
@@ -19,7 +18,6 @@ export interface IOptionsFormGroup<TControls extends ControlsCollection> {
      * / Функция включение валидаций по условию (по умолчанию включено всегда)
      */
     activate?: (() => boolean) | null;
-    comparer?: Comparer;
 }
 declare type ControlsValueType<TControls extends ControlsCollection = ControlsCollection> = {
     [K in keyof TControls]: TControls[K] extends FormControl<any> ? TControls[K]['value'] : TControls[K] extends FormGroup ? ControlsValueType<TControls[K]['controls']> : never;
@@ -27,7 +25,6 @@ declare type ControlsValueType<TControls extends ControlsCollection = ControlsCo
 export declare class FormGroup<TControls extends ControlsCollection = ControlsCollection, TControlsValues = ControlsValueType<TControls>> extends FormAbstractGroup {
     private readonly reactionOnIsActiveDisposer;
     private readonly validators;
-    private comparer;
     controls: TControls;
     constructor(
     /**
@@ -48,6 +45,7 @@ export declare class FormGroup<TControls extends ControlsCollection = ControlsCo
     get changed(): boolean;
     protected handleReset(): this;
     get formData(): TControlsValues;
+    get chagedData(): Partial<TControlsValues>;
     updateFormData(data: Partial<TControlsValues>): void;
 }
 export {};

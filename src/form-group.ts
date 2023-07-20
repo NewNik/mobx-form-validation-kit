@@ -1,11 +1,10 @@
-import { action, IReactionDisposer, makeObservable, reaction } from 'mobx';
+import { action, computed, IReactionDisposer, makeObservable, reaction } from 'mobx';
 import { AbstractControl, ControlsCollection, ValidatorsFunction } from './abstract-control';
 import { ValidationEvent } from './validation-event';
 import { FormAbstractGroup } from './form-abstract-group';
 import { ControlTypes } from './сontrol-types';
 import { FormControl } from './form-control';
 
-type Comparer = (prev: any, current: any) => boolean;
 export interface IOptionsFormGroup<TControls extends ControlsCollection> {
   /**
    * Validations
@@ -22,8 +21,6 @@ export interface IOptionsFormGroup<TControls extends ControlsCollection> {
    * / Функция включение валидаций по условию (по умолчанию включено всегда)
    */
   activate?: (() => boolean) | null;
-
-  comparer?: Comparer;
 }
 
 type ControlsValueType<TControls extends ControlsCollection = ControlsCollection> = {
@@ -42,8 +39,6 @@ export class FormGroup<
 
   private readonly validators: ValidatorsFunction<FormGroup<TControls>>[] = [];
 
-  private comparer: Comparer;
-
   public controls: TControls;
 
   constructor(
@@ -61,9 +56,10 @@ export class FormGroup<
     super(options.activate ?? null, options.additionalData, ControlTypes.Group);
     makeObservable<FormGroup<TControls, TControlsValues>, 'checkGroupValidations'>(this, {
       checkGroupValidations: action,
+      chagedData: computed,
+      formData: computed,
+      updateFormData: action,
     });
-
-    this.comparer = options.comparer || ((prev: any, next: any) => prev === next);
 
     this.controls = controls;
     this.validators = options.validators ?? [];
@@ -122,11 +118,11 @@ export class FormGroup<
 
   public get changed() {
     for (const control of this.getControls()) {
-      if(control.changed) {
+      if (control.changed) {
         return true;
       }
     }
-    return false
+    return false;
   }
 
   protected handleReset() {
@@ -151,6 +147,21 @@ export class FormGroup<
     return result as TControlsValues;
   }
 
+  public get chagedData(): Partial<TControlsValues> {
+    const result: Record<string, any> = {};
+    for (const key in this.controls) {
+      const control = this.controls[key];
+      if (control && control.changed) {
+        if (control instanceof FormGroup) {
+          result[key] = control.formData;
+        } else if (control instanceof FormControl) {
+          result[key] = control.value;
+        }
+      }
+    }
+    return result as Partial<TControlsValues>;
+  }
+
   public updateFormData(data: Partial<TControlsValues>) {
     for (const key in data) {
       const control = this.controls[key];
@@ -159,7 +170,7 @@ export class FormGroup<
         if (control instanceof FormGroup) {
           control.updateFormData(value as any);
         } else if (control instanceof FormControl) {
-          if (!this.comparer(value, control.value)) {
+          if (value !== control.value) {
             control.value = value;
           }
         }
