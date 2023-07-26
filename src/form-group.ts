@@ -56,8 +56,8 @@ export class FormGroup<
     super(options.activate ?? null, options.additionalData, ControlTypes.Group);
     makeObservable<FormGroup<TControls, TControlsValues>, 'checkGroupValidations'>(this, {
       checkGroupValidations: action,
-      chagedData: computed,
-      formData: computed,
+      chagedData: computed.struct,
+      formData: computed.struct,
       updateFormData: action,
     });
 
