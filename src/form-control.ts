@@ -1,4 +1,4 @@
-import { action, computed, IReactionDisposer, makeObservable, observable, reaction } from 'mobx';
+import { action, computed, IReactionDisposer, makeObservable, observable, reaction, runInAction } from 'mobx';
 import { ValidationEvent } from './validation-event';
 import { ControlTypes } from './сontrol-types';
 import { noop } from './utilites';
@@ -274,15 +274,17 @@ export class FormControl<TEntity = string> extends AbstractControl {
     return this;
   };
 
-  protected handleReset() {
-    this.value = this.initialValue;
-    this.runInAction(() => {
-      this.setDirty(false);
-      this.setFocused(false);
-      this.setTouched(false);
-    });
-    return this;
-  }
+	protected handleReset() {
+		this.value = this.initialValue;
+		this.wait().then(() => {
+			runInAction(() => {
+				this.setDirty(false);
+				this.setFocused(false);
+				this.setTouched(false);
+			});
+		});
+		return this;
+	}
 
   public dispose(): void {
     super.dispose();
