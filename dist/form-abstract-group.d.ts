@@ -9,14 +9,14 @@ export declare abstract class FormAbstractGroup extends AbstractControl {
     get focused(): boolean;
     constructor(
     /**
-    * Function enable validation by condition (always enabled by default)
-    * / Функция включение валидаций по условию (по умолчанию включено всегда)
-    */
+     * Function enable validation by condition (always enabled by default)
+     * / Функция включение валидаций по условию (по умолчанию включено всегда)
+     */
     activate: (() => boolean) | null | undefined, additionalData: any, type: ControlTypes);
     /**
-    * Set marker "Value has changed"
-    * / Установить маркер "Значение изменилось"
-    */
+     * Set marker "Value has changed"
+     * / Установить маркер "Значение изменилось"
+     */
     setDirty: (dirty: boolean) => this;
     /**
      * Set marker "field was in focus"
@@ -28,6 +28,7 @@ export declare abstract class FormAbstractGroup extends AbstractControl {
      * Возвращает полный список FormControl-ов без вложений (терминальных элементов)
      */
     allControls(): FormControl<any>[];
+    get firstErrorControl(): FormControl<any> | undefined;
     protected abstract getControls(): IterableIterator<AbstractControl>;
     protected abbreviatedAND: (getData: (control: AbstractControl) => boolean) => boolean;
     protected abbreviatedOR: (getData: (control: AbstractControl) => boolean) => boolean;
