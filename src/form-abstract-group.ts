@@ -26,12 +26,12 @@ export abstract class FormAbstractGroup extends AbstractControl {
 
   constructor(
     /**
-    * Function enable validation by condition (always enabled by default)
-    * / Функция включение валидаций по условию (по умолчанию включено всегда)
-    */
+     * Function enable validation by condition (always enabled by default)
+     * / Функция включение валидаций по условию (по умолчанию включено всегда)
+     */
     activate: (() => boolean) | null = null,
     additionalData: any,
-    type: ControlTypes
+    type: ControlTypes,
   ) {
     super(activate, additionalData, type);
     makeObservable(this, {
@@ -40,18 +40,19 @@ export abstract class FormAbstractGroup extends AbstractControl {
       dirty: computed,
       touched: computed,
       focused: computed,
-      
+      firstErrorControl: computed,
+
       setDirty: action,
       setTouched: action,
 
-      allControls: action
+      allControls: action,
     });
   }
 
   /**
-  * Set marker "Value has changed" 
-  * / Установить маркер "Значение изменилось"
-  */
+   * Set marker "Value has changed"
+   * / Установить маркер "Значение изменилось"
+   */
   public setDirty = (dirty: boolean) => {
     for (const control of this.getControls()) {
       control.setDirty(dirty);
@@ -60,7 +61,7 @@ export abstract class FormAbstractGroup extends AbstractControl {
   };
 
   /**
-   * Set marker "field was in focus" 
+   * Set marker "field was in focus"
    * / Установить маркер "Поле было в фокусе"
    */
   public setTouched = (touched: boolean) => {
@@ -84,6 +85,10 @@ export abstract class FormAbstractGroup extends AbstractControl {
       }
     }
     return controls;
+  }
+
+  public get firstErrorControl() {
+    return this.allControls().find(c => c.invalid && !!c.element);
   }
 
   protected abstract getControls(): IterableIterator<AbstractControl>;
