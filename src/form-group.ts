@@ -118,7 +118,7 @@ export class FormGroup<
 
   public get changed() {
     for (const control of this.getControls()) {
-      if (control.changed) {
+      if (control.changed && control.active) {
         return true;
       }
     }
