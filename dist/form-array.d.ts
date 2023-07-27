@@ -77,7 +77,7 @@ export declare class FormArray<TAbstractControl extends AbstractControl> extends
      * @param start The beginning of the specified portion of the array.
      * @param end The end of the specified portion of the array.
      */
-    slice: (start?: number | undefined, end?: number | undefined) => TAbstractControl[];
+    slice: (start?: number, end?: number) => TAbstractControl[];
     /**
      * Sorts an array.
      * @param compareFn The name of the function used to determine the order of the elements. If omitted, the elements are sorted in ascending, ASCII character order.
@@ -88,7 +88,7 @@ export declare class FormArray<TAbstractControl extends AbstractControl> extends
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      */
-    splice: (start: number, deleteCount?: number | undefined) => TAbstractControl[];
+    splice: (start: number, deleteCount?: number) => TAbstractControl[];
     /**
      * Inserts new elements at the start of an array.
      * @param items  Elements to insert at the start of the Array.
@@ -99,13 +99,13 @@ export declare class FormArray<TAbstractControl extends AbstractControl> extends
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.
      */
-    indexOf: (searchElement: TAbstractControl, fromIndex?: number | undefined) => number;
+    indexOf: (searchElement: TAbstractControl, fromIndex?: number) => number;
     /**
      * Returns the index of the last occurrence of a specified value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.
      */
-    lastIndexOf: (searchElement: TAbstractControl, fromIndex?: number | undefined) => number;
+    lastIndexOf: (searchElement: TAbstractControl, fromIndex?: number) => number;
     /**
      * Determines whether all the members of an array satisfy the specified test.
      * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.

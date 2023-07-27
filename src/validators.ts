@@ -175,7 +175,7 @@ export const minValueValidator = <TEntity extends string | null | number | Date>
     if (control.value == null) {
       return [];
     }
-    const minValue = getMin();
+    const minValue: any = getMin();
     let value: any = control.value;
     if (typeof value === 'string') {
       if (typeof minValue === 'number') {
@@ -209,7 +209,7 @@ export const maxValueValidator =
       if (control.value == null) {
         return [];
       }
-      const maxValue = getMax();
+      const maxValue: any = getMax();
       let value: any = control.value;
       if (typeof value === 'string') {
         if (typeof maxValue === 'number') {

@@ -28,6 +28,10 @@ export declare abstract class FormAbstractGroup extends AbstractControl {
      * Возвращает полный список FormControl-ов без вложений (терминальных элементов)
      */
     allControls(): FormControl<any>[];
+    /**
+     * First FormControl with error
+     * Первый FormControl с ошибкой
+     */
     get firstErrorControl(): FormControl<any> | undefined;
     protected abstract getControls(): IterableIterator<AbstractControl>;
     protected abbreviatedAND: (getData: (control: AbstractControl) => boolean) => boolean;

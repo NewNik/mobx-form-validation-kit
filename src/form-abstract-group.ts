@@ -87,8 +87,12 @@ export abstract class FormAbstractGroup extends AbstractControl {
     return controls;
   }
 
+  /**
+   * First FormControl with error
+   * Первый FormControl с ошибкой
+   */
   public get firstErrorControl() {
-    return this.allControls().find(c => c.invalid && !!c.element);
+    return this.allControls().find(c => c.invalid && c.active);
   }
 
   protected abstract getControls(): IterableIterator<AbstractControl>;

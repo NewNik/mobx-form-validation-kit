@@ -4,9 +4,9 @@ import { ValidationEvent } from './validation-event';
 import { ValidationEventTypes } from './validation-event-types';
 import { IDictionary } from './idictionary';
 import { Delegate } from './delegate';
-export declare type UpdateValidValueHandler<TEntity> = (val: TEntity) => void;
-export declare type ValidatorsFunction<TAbstractControl extends AbstractControl> = (control: TAbstractControl) => Promise<ValidationEvent[]>;
-export declare type ControlsCollection = IDictionary<AbstractControl>;
+export type UpdateValidValueHandler<TEntity> = (val: TEntity) => void;
+export type ValidatorsFunction<TAbstractControl extends AbstractControl> = (control: TAbstractControl) => Promise<ValidationEvent[]>;
+export type ControlsCollection = IDictionary<AbstractControl>;
 export declare abstract class AbstractControl {
     /**
      * Type

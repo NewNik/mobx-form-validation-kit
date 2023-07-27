@@ -1,6 +1,6 @@
 import { ValidationEvent } from './validation-event';
 import { AbstractControl, UpdateValidValueHandler, ValidatorsFunction } from './abstract-control';
-declare type Comparer<TEntity> = (prev: TEntity, current: TEntity) => boolean;
+type Comparer<TEntity> = (prev: TEntity, current: TEntity) => boolean;
 export interface OptionsFormControl<TEntity> {
     /**
      * Validations

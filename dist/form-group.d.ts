@@ -19,10 +19,10 @@ export interface IOptionsFormGroup<TControls extends ControlsCollection> {
      */
     activate?: (() => boolean) | null;
 }
-declare type ControlsValueType<TControls extends ControlsCollection = ControlsCollection> = {
+type ControlsValueType<TControls extends ControlsCollection = ControlsCollection> = {
     [K in keyof TControls]: TControls[K] extends FormControl<any> ? TControls[K]['value'] : TControls[K] extends FormGroup ? ControlsValueType<TControls[K]['controls']> : never;
 };
-export declare class FormGroup<TControls extends ControlsCollection = ControlsCollection, TControlsValues = ControlsValueType<TControls>> extends FormAbstractGroup {
+export declare class FormGroup<TControls extends ControlsCollection = ControlsCollection, TControlsValues extends ControlsValueType<TControls> = ControlsValueType<TControls>> extends FormAbstractGroup {
     private readonly reactionOnIsActiveDisposer;
     private readonly validators;
     controls: TControls;
@@ -44,7 +44,15 @@ export declare class FormGroup<TControls extends ControlsCollection = ControlsCo
     runInAction(action: () => void): void;
     get changed(): boolean;
     protected handleReset(): this;
+    /**
+     * An object with the values of all FormControls, in the form in which the FormGroup was initialized
+     * / Объект со значениями всех FormControl-ов, в том виде, в которым был проинициализирован FormGroup
+     */
     get formData(): TControlsValues;
+    /**
+     * An object with the values of the modified FormControls, in the form in which the FormGroup was initialized
+     * / Объект со значений измененных FormControl-ов, в том виде, в которым был проинициализирован FormGroup
+     */
     get chagedData(): Partial<TControlsValues>;
     updateFormData(data: Partial<TControlsValues>): void;
 }

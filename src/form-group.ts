@@ -33,7 +33,7 @@ type ControlsValueType<TControls extends ControlsCollection = ControlsCollection
 
 export class FormGroup<
   TControls extends ControlsCollection = ControlsCollection,
-  TControlsValues = ControlsValueType<TControls>
+  TControlsValues extends ControlsValueType<TControls> = ControlsValueType<TControls>,
 > extends FormAbstractGroup {
   private readonly reactionOnIsActiveDisposer: IReactionDisposer;
 
@@ -132,6 +132,10 @@ export class FormGroup<
     return this;
   }
 
+  /**
+   * An object with the values of all FormControls, in the form in which the FormGroup was initialized
+   * / Объект со значениями всех FormControl-ов, в том виде, в которым был проинициализирован FormGroup
+   */
   public get formData(): TControlsValues {
     const result: Record<string, any> = {};
     for (const key in this.controls) {
@@ -147,11 +151,15 @@ export class FormGroup<
     return result as TControlsValues;
   }
 
+  /**
+   * An object with the values of the modified FormControls, in the form in which the FormGroup was initialized
+   * / Объект со значений измененных FormControl-ов, в том виде, в которым был проинициализирован FormGroup
+   */
   public get chagedData(): Partial<TControlsValues> {
     const result: Record<string, any> = {};
     for (const key in this.controls) {
       const control = this.controls[key];
-      if (control && control.changed) {
+      if (control && control.changed && control.active) {
         if (control instanceof FormGroup) {
           result[key] = control.formData;
         } else if (control instanceof FormControl) {
@@ -164,14 +172,18 @@ export class FormGroup<
 
   public updateFormData(data: Partial<TControlsValues>) {
     for (const key in data) {
-      const control = this.controls[key];
-      if (control) {
-        const value = data[key];
-        if (control instanceof FormGroup) {
-          control.updateFormData(value as any);
-        } else if (control instanceof FormControl) {
-          if (value !== control.value) {
-            control.value = value;
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        const control = this.controls[key];
+        if (control) {
+          const value: Partial<TControlsValues>[keyof Partial<TControlsValues>] = data[key];
+          if (value !== undefined) {
+            if (control instanceof FormGroup && value !== null) {
+              control.updateFormData(value);
+            } else if (control instanceof FormControl) {
+              if (value !== control.value) {
+                control.value = value;
+              }
+            }
           }
         }
       }
