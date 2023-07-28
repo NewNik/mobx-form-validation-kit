@@ -175,6 +175,8 @@ export class FormControl<TEntity = string> extends AbstractControl {
       setTouched: action,
       setFocused: action,
       checkInternalValue: action,
+
+      errorMessage: computed,
     });
     this.comparer = options.comparer || ((prev: TEntity, next: TEntity) => prev === next);
 
@@ -274,17 +276,17 @@ export class FormControl<TEntity = string> extends AbstractControl {
     return this;
   };
 
-	protected handleReset() {
-		this.value = this.initialValue;
-		this.wait().then(() => {
-			runInAction(() => {
-				this.setDirty(false);
-				this.setFocused(false);
-				this.setTouched(false);
-			});
-		});
-		return this;
-	}
+  protected handleReset() {
+    this.value = this.initialValue;
+    this.wait().then(() => {
+      runInAction(() => {
+        this.setDirty(false);
+        this.setFocused(false);
+        this.setTouched(false);
+      });
+    });
+    return this;
+  }
 
   public dispose(): void {
     super.dispose();
@@ -318,4 +320,12 @@ export class FormControl<TEntity = string> extends AbstractControl {
       },
     );
   };
+
+  /**
+   * First error message, server Errors in priority
+   * / Сообщение первой ошибки, serverErrors в приоритете
+   */
+  get errorMessage() {
+    return this.serverErrors.length > 0 ? this.serverErrors[0] : this.errors.length > 0 ? this.errors[0].message : '';
+  }
 }

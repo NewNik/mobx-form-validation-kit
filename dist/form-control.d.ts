@@ -127,5 +127,10 @@ export declare class FormControl<TEntity = string> extends AbstractControl {
     dispose(): void;
     runInAction(action: () => void): void;
     private checkInternalValue;
+    /**
+     * First error message, server Errors in priority
+     * / Сообщение первой ошибки, serverErrors в приоритете
+     */
+    get errorMessage(): string;
 }
 export {};
